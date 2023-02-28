@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Counter from "./Counter";
+class App extends Component {
+  state = { counter: 0 };
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  onIncrement = () => {
+    this.setState({ counter: this.state.counter + 1 });
+  };
+
+  onDecrement = () => {
+    this.setState({ counter: this.state.counter - 1 });
+  };
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.onIncrement}>Increment</button>
+        <button onClick={this.onDecrement}>Decrease</button>
+        <button
+          onClick={() => {
+            this.setState({ counter: 0 });
+          }}>
+          Reset
+        </button>
+        {/*different way to call function, shorter sintax but messier */}
+        <Counter counter={this.state.counter} />
+        {/*state is pass down in to the child */}
+      </div>
+    );
+  }
 }
 
 export default App;
