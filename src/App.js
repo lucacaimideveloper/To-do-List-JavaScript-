@@ -1,31 +1,28 @@
 import React, { Component } from "react";
-import Counter from "./Counter";
+
 class App extends Component {
-  state = { counter: 0 };
+  state = { taskList: [] };
 
-  onIncrement = () => {
-    this.setState({ counter: this.state.counter + 1 });
+  onInput = (e) => {
+    this.setState({ userInput: e.target.value });
   };
 
-  onDecrement = () => {
-    this.setState({ counter: this.state.counter - 1 });
+  onClick = () => {
+    this.setState({ taskList: [...this.state.taskList, this.state.userInput] }); //this call the old arr + the new imput
   };
-
   render() {
+    console.log(this.state);
     return (
-      <div>
-        <button onClick={this.onIncrement}>Increment</button>
-        <button onClick={this.onDecrement}>Decrease</button>
-        <button
-          onClick={() => {
-            this.setState({ counter: 0 });
-          }}>
-          Reset
-        </button>
-        {/*different way to call function, shorter sintax but messier */}
-        <Counter counter={this.state.counter} />
-        {/*state is pass down in to the child */}
-      </div>
+      <>
+        <input type="text" onInput={this.onInput} />
+        <button onClick={this.onClick}>Add task</button>
+        <ul>
+          {this.state.taskList.map((item) => (
+            <li>{item}</li>
+          ))}{" "}
+          {/**this map, will store all the task through the li, and realy on */}
+        </ul>
+      </>
     );
   }
 }
