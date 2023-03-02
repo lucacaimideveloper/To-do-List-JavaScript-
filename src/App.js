@@ -38,7 +38,7 @@ class App extends Component {
 
     const todos = [...this.state.todos];
 
-    todos[index].done = !todos[index].done; // i can swap from t to f
+    todos[index].done = !todos[index].done; // i can swap from t to f !will invert the boolean
 
     this.setState({ todos }); // I change the state o
   };
@@ -52,6 +52,20 @@ class App extends Component {
     todos.splice(index, 1);
     this.setState({ todos }); // new state define in base of the function
   };
+
+  onSortAsc = () => {
+    const todos = [...this.state.todos];
+
+    todos.sort((item, nextItem) => {
+      if (item.name < nextItem.name) return 1;
+
+      if (item.name > nextItem.name) return -1;
+
+      return 0;
+    });
+
+    this.setState({ todos });
+  };
   render() {
     return (
       <>
@@ -59,6 +73,7 @@ class App extends Component {
         <div className="controls">
           <input onInput={this.onInput} type="text" />
           <button onClick={this.onAdd}>Add</button>
+          <button onClick={this.onSortAsc}>Sort Asc</button>
         </div>
         {/**this is the code for create display, map over the state obj */}
         {this.state.todos.map((todo) => (
