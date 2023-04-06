@@ -28,7 +28,7 @@ class App extends Component {
       return;
     } // if u found it keep it
 
-    //copy iser input unto the todos array
+    //copy user input unto the todos array
     const todo = { done: false, name: this.state.userInput }; //biuld obj
     this.setState({ todos: [...this.state.todos, todo] }); // update the old todo list, become new arr, and add ur new todo
   };
@@ -68,28 +68,46 @@ class App extends Component {
   };
   render() {
     return (
-      <>
+      <body>
         {/* user input controls */}
+
+        <div class="intro">
+          <h1>To Do List:</h1>
+          <h2>Create using JavaScript React App</h2>
+        </div>
         <div className="controls">
-          <input onInput={this.onInput} type="text" />
-          <button onClick={this.onAdd}>Add</button>
-          <button onClick={this.onSortAsc}>Sort Asc</button>
+          <input
+            class="label"
+            placeholder="Type"
+            onInput={this.onInput}
+            type="text"
+          />
+          <button class="btn" onClick={this.onAdd}>
+            Add
+          </button>
+          <button class="btn" onClick={this.onSortAsc}>
+            Sort Asc
+          </button>
         </div>
         {/**this is the code for create display, map over the state obj */}
-        {this.state.todos.map((todo) => (
-          <div
-            className={
-              todo.done === true ? "done todoItem" : "undone todoItem"
-            }>
-            <p>{todo.name}</p>
-            <button onClick={() => this.onToggle(todo.name)}>
-              {todo.done ? "done" : "undone"}
-            </button>
-            <button onClick={() => this.onDelete(todo.name)}>delete</button>
-            {/**every time u see this.onClick is the action this.onDelete call back function */}
-          </div>
-        ))}
-      </>
+        <div class="box">
+          {this.state.todos.map((todo) => (
+            <div
+              className={
+                todo.done === true ? "done todoItem" : "undone todoItem"
+              }>
+              <p>{todo.name}</p>
+              <button class="btn2" onClick={() => this.onToggle(todo.name)}>
+                {todo.done ? "done" : "undone"}
+              </button>
+              <button class="btn2" onClick={() => this.onDelete(todo.name)}>
+                delete
+              </button>
+              {/**every time u see this.onClick is the action this.onDelete call back function */}
+            </div>
+          ))}
+        </div>
+      </body>
     );
   }
 }

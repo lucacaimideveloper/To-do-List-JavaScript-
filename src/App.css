@@ -1,9 +1,69 @@
+body {
+  background-color: rgb(28, 32, 32);
+  margin: 50px;
+}
+.intro {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+}
+.intro h1 {
+  margin-right: 10px;
+  font-size: 2em;
+  color: rgb(14, 131, 136);
+}
+.intro h2 {
+  font-size: 1.5em;
+  font-weight: 300;
+  color: rgb(14, 131, 136);
+}
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px;
+}
+.done,
+.undone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+  width: 50%;
+  height: 50%;
+  border-radius: 20%;
+}
 .done {
-  background-color: rgb(80, 80, 187);
+  background-color: rgb(203, 228, 222);
 }
 .undone {
-  background-color: rgb(189, 189, 27);
+  background-color: rgb(46, 79, 79);
 }
 .todoItem {
   padding: 10px;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  margin: 10px 10px;
+}
+.label {
+  width: 300px;
+  height: 30px;
+  margin-right: 10px;
+  border: 2px solid rgb(14, 131, 136);
+}
+.btn,
+.btn2 {
+  width: 70px;
+  height: 25px;
+  margin: 5px;
+  border: 2px solid rgb(14, 131, 136);
+  background-color: #fff;
+  cursor: pointer;
+}
+.btn2 {
+  border: 2px solid rgb(203, 228, 222);
 }
