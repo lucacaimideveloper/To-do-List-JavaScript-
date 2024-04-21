@@ -1,115 +1,133 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Data from "./components/Data/Data.jsx";
 import "./App.css";
 
-class App extends Component {
-  state = {
-    todos: [
-      { name: "clean car", done: false }, //done is refer to the stete
-      { name: "clean house", done: true },
-      { name: "study", done: true },
-    ],
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  const getApiData = async () => {
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/todos/`
+    );
+    const limitTodos = data.slice(0, 10);
+    setTodos(limitTodos);
+  };
+  useEffect(() => {
+    getApiData();
+  }, []);
+
+  const onInput = (e) => {
+    setUserInput(e.target.value);
+    // console.log(setUserInput(), e.target.value);
   };
 
-  onInput = (e) => {
-    this.setState({ userInput: e.target.value });
-  };
-
-  onAdd = () => {
-    //check the user entered smtg
-    if (!this.state.userInput || this.state.userInput.length < 3) {
+  const onAdd = () => {
+    if (!userInput || userInput.length < 3) {
       return;
     }
-    //defensive check if exist ignor it
-    const result = this.state.todos.some((item) => {
-      return item.name === this.state.userInput;
-    }); //arr method over todos state
 
-    if (result) {
-      return;
-    } // if u found it keep it
+    let idCounter = Date.now();
 
-    //copy user input unto the todos array
-    const todo = { done: false, name: this.state.userInput }; //biuld obj
-    this.setState({ todos: [...this.state.todos, todo] }); // update the old todo list, become new arr, and add ur new todo
+    const newTodo = {
+      id: idCounter++,
+      title: userInput,
+      completed: false,
+    };
+    todos.unshift(newTodo);
+    // setTodos([...todos, newTodo]);
+    setUserInput("");
   };
 
-  onToggle = (name) => {
-    const index = this.state.todos.findIndex((todo) => todo.name === name);
+  const onToggle = (id) => {
+    const index = todos.findIndex((todo) => todo.id === id);
 
-    const todos = [...this.state.todos];
+    const _todos = [...todos];
 
-    todos[index].done = !todos[index].done; // i can swap from t to f !will invert the boolean
+    _todos[index].completed = !_todos[index].completed; // i can swap from t to f !will invert the boolean
 
-    this.setState({ todos }); // I change the state o
+    setTodos(_todos);
   };
 
-  onDelete = (name) => {
-    // delete from index is not the best option becuase it create confusion in the code
-    //remove an item with splic
-
-    const index = this.state.todos.findIndex((todo) => todo.name === name); // so we find the index of what we want to delete and from it we will splice
-    const todos = [...this.state.todos];
-    todos.splice(index, 1);
-    this.setState({ todos }); // new state define in base of the function
+  const onDelete = (id) => {
+    const index = todos.findIndex((todo) => todo.id === id);
+    // so we find the index of what we want to delete and from it we will splice
+    const _todos = [...todos];
+    //
+    _todos.splice(index, 1);
+    //
+    setTodos(_todos);
   };
 
-  onSortAsc = () => {
-    const todos = [...this.state.todos];
+  const onSaveEdit = (id, title) => {
+    const index = todos.findIndex((todo) => todo.id === id);
+    const _todos = [...todos];
+    _todos[index].title = title;
+    setTodos(_todos);
+  };
+  const sortTodos = (order) => {
+    const sortedTodos = [...todos].sort((a, b) => {
+      const titleA = a.title.toLowerCase();
+      const titleB = b.title.toLowerCase();
 
-    todos.sort((item, nextItem) => {
-      if (item.name < nextItem.name) return 1;
-
-      if (item.name > nextItem.name) return -1;
-
-      return 0;
+      if (order === "asc") {
+        if (titleA < titleB) return -1;
+        if (titleA > titleB) return 1;
+        return 0;
+      } else {
+        if (titleA > titleB) return -1;
+        if (titleA < titleB) return 1;
+        return 0;
+      }
     });
-
-    this.setState({ todos });
+    setTodos(sortedTodos);
   };
-  render() {
-    return (
-      <body>
-        {/* user input controls */}
 
-        <div class="intro">
-          <h1>To Do List:</h1>
-          <h2>Create using JavaScript React App</h2>
-        </div>
-        <div className="controls">
-          <input
-            class="label"
-            placeholder="Type"
-            onInput={this.onInput}
-            type="text"
-          />
-          <button class="btn" onClick={this.onAdd}>
-            Add
-          </button>
-          <button class="btn" onClick={this.onSortAsc}>
-            Sort Asc
-          </button>
-        </div>
-        {/**this is the code for create display, map over the state obj */}
-        <div class="box">
-          {this.state.todos.map((todo) => (
-            <div
-              className={
-                todo.done === true ? "done todoItem" : "undone todoItem"
-              }>
-              <p>{todo.name}</p>
-              <button class="btn2" onClick={() => this.onToggle(todo.name)}>
-                {todo.done ? "done" : "undone"}
-              </button>
-              <button class="btn2" onClick={() => this.onDelete(todo.name)}>
-                delete
-              </button>
-              {/**every time u see this.onClick is the action this.onDelete call back function */}
-            </div>
-          ))}
-        </div>
-      </body>
-    );
-  }
-}
+  const toggleSort = () => {
+    const newSort = sortOrder === "asc" ? "dsc" : "asc";
+    setSortOrder(newSort);
+    sortTodos(newSort);
+  };
 
+  let done = 0;
+  todos.forEach((todo) => {
+    if (todo.completed) {
+      return (done += 1);
+    }
+  });
+
+  return (
+    <>
+      <div className="intro">
+        <h1>To Do List:</h1>
+        <h2>Create using JavaScript React App</h2>
+        <h1 className="intro">Total: </h1>
+      </div>
+      <div className="controls">
+        <input
+          className="label"
+          placeholder="Type"
+          onInput={onInput}
+          type="text"
+          value={userInput}
+        />
+        <button className="btn" onClick={onAdd}>
+          Add
+        </button>
+
+        <button className="btn" onClick={toggleSort}>
+          {sortOrder === "asc" ? "Sort ASC" : "Sort DSC"}{" "}
+        </button>
+      </div>
+      <Data
+        todos={todos}
+        onToggle={onToggle}
+        onDelete={onDelete}
+        onSaveEdit={onSaveEdit}
+      />
+    </>
+  );
+};
 export default App;

@@ -1,0 +1,29 @@
+.done,
+.undone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin: 10px;
+  width: 300px;
+  height: 200px;
+  border-radius: 25px;
+}
+.done {
+  background-color: rgb(203, 228, 222);
+}
+.undone {
+  background-color: rgb(46, 79, 79);
+}
+.btn2 {
+  width: 90px;
+  height: 30px;
+  margin: 5px;
+  border: 2px solid rgb(14, 131, 136);
+  border-radius: 25px;
+  background-color: #fff;
+  cursor: pointer;
+}
+.btn2 {
+  border: 2px solid rgb(203, 228, 222);
+}
